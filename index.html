@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asmophacy's cute snake game</title>
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/favicon.ico" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -40,6 +38,15 @@
 
     <canvas id="gameCanvas" width="600" height="600" class="hidden"></canvas>
 
+    <div id="controls" class="hidden">
+        <button id="up-button" class="control-button">▲</button>
+        <div>
+            <button id="left-button" class="control-button">◀</button>
+            <button id="right-button" class="control-button">▶</button>
+        </div>
+        <button id="down-button" class="control-button">▼</button>
+    </div>
+
     <audio id="background-music" loop>
         <source src="assets/music.opus" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -50,6 +57,11 @@
     </audio>
   
         
+        
+
+    <script src="script.js"></script>
+</body>
+</html>
         
 
     <script src="script.js"></script>
