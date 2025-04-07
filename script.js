@@ -178,6 +178,7 @@ startButton.addEventListener('click', () => {
     console.log("Start button clicked. Speed:", gameSpeed);
     mainMenu.classList.add('hidden');
     canvas.classList.remove('hidden');
+    document.getElementById('controls').classList.remove('hidden'); // Show controls
     isPaused = false;
     setupGame(); // Initialize snake, apples, score
 
@@ -200,6 +201,18 @@ startButton.addEventListener('click', () => {
     console.log("New game interval started:", game, "with delay:", gameSpeed);
     canvas.focus(); // Try to focus the canvas for key events
 });
+
+// Get references to the control buttons
+const upButton = document.getElementById('up-button');
+const downButton = document.getElementById('down-button');
+const leftButton = document.getElementById('left-button');
+const rightButton = document.getElementById('right-button');
+
+// Add event listeners for the buttons
+upButton.addEventListener('click', () => changeDirection({ keyCode: 38 })); // Up arrow
+downButton.addEventListener('click', () => changeDirection({ keyCode: 40 })); // Down arrow
+leftButton.addEventListener('click', () => changeDirection({ keyCode: 37 })); // Left arrow
+rightButton.addEventListener('click', () => changeDirection({ keyCode: 39 })); // Right arrow);
 
 window.addEventListener('keydown', handleKeyDown);
 
@@ -224,6 +237,13 @@ function handleKeyDown(event) {
     }
     console.log("Key pressed:", key, "Current direction:", direction);
 
+    changeDirection(event);
+}
+
+// Add this function if it's missing
+function changeDirection(event) {
+    const key = event.keyCode;
+    // Prevent reversing direction directly
     const goingUp = direction === 'UP';
     const goingDown = direction === 'DOWN';
     const goingLeft = direction === 'LEFT';
