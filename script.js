@@ -26,12 +26,11 @@ let gameSpeed = 100;
 let allImagesLoaded = false;
 let isPaused = false;
 
-// --- NEW: Apple count and timing ---
+// --- Apple count and timing ---
 let targetAppleCount = 2; // Start with 2 apples
 let gameStartTime = null;
 let appleCountIncreased = false;
 const appleIncreaseTime = 30000; // 30 seconds in milliseconds
-// --- End NEW ---
 
 // Load images
 const appleImg = new Image();
@@ -84,7 +83,7 @@ bodyVertical.onerror = () => console.error("Failed to load snake-body-vertical.p
 bodyHorizontal.onerror = () => console.error("Failed to load snake-body-horizontal.png");
 backgroundImg.onerror = () => console.error("Failed to load background.jpg");
 
-// --- NEW: Helper function to check if a location is occupied ---
+// --- Helper function to check if a location is occupied ---
 function isOccupied(x, y) {
     // Check snake body
     for (const segment of snake) {
@@ -100,9 +99,8 @@ function isOccupied(x, y) {
     }
     return false;
 }
-// --- End NEW ---
 
-// --- NEW: Function to spawn a single new apple ---
+// --- Function to spawn a single new apple ---
 function spawnNewApple() {
     let newApple;
     do {
@@ -114,7 +112,6 @@ function spawnNewApple() {
     apples.push(newApple);
     console.log("Spawned apple at:", newApple.x / box, newApple.y / box);
 }
-// --- End NEW ---
 
 speedSlider.oninput = function() {
     gameSpeed = parseInt(this.value);
@@ -129,17 +126,16 @@ function setupGame() {
     score = 0;
     lastScoreDiv.textContent = '';
 
-    // --- UPDATED: Initialize apples ---
+    // --- Initialize apples ---
     apples = []; // Clear existing apples
     targetAppleCount = 2; // Reset target count
     appleCountIncreased = false; // Reset flag
     for (let i = 0; i < targetAppleCount; i++) {
         spawnNewApple(); // Spawn initial apples
     }
-    // --- End UPDATED ---
 }
 
-// --- NEW: Mute Button Logic ---
+// --- Mute Button Logic ---
 muteButton.addEventListener('click', toggleMute);
 
 function toggleMute() {
@@ -149,9 +145,8 @@ function toggleMute() {
     muteButton.textContent = isMuted ? 'Unmute 🔈' : 'Mute 🔇';
     console.log("Muted:", isMuted);
 }
-// --- End NEW ---
 
-// --- NEW: Helper function to safely play audio ---
+// --- Helper function to safely play audio ---
 // Browsers often block autoplay until user interaction
 function playAudioSafely(audioElement) {
     const playPromise = audioElement.play();
@@ -166,7 +161,6 @@ function playAudioSafely(audioElement) {
         });
     }
 }
-// --- End NEW ---
 
 // Event listener for the start button
 startButton.addEventListener('click', () => {
@@ -182,15 +176,13 @@ startButton.addEventListener('click', () => {
     isPaused = false;
     setupGame(); // Initialize snake, apples, score
 
-    // --- NEW: Record start time ---
+    // --- Record start time ---
     gameStartTime = Date.now();
-    // --- End NEW ---
 
-    // --- UPDATED: Start music ---
+    // --- Start music ---
     if (!isMuted) {
         playAudioSafely(backgroundMusic);
     }
-    // --- End UPDATED ---
 
     // Clear any residual interval just in case
     if (game) {
@@ -280,9 +272,8 @@ function pauseGame() {
     console.log("Game paused. Interval ID:", game);
     game = null;
 
-    // --- UPDATED: Pause music ---
+    // --- Pause music ---
     backgroundMusic.pause();
-    // --- End UPDATED ---
 
     ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -296,11 +287,10 @@ function resumeGame() {
     if (game) return;
     isPaused = false;
 
-    // --- UPDATED: Resume music ---
+    // --- Resume music ---
     if (!isMuted) {
         playAudioSafely(backgroundMusic);
     }
-    // --- End UPDATED ---
 
     game = setInterval(draw, gameSpeed);
     console.log("Game resumed. New interval ID:", game);
@@ -313,14 +303,12 @@ function gameOver() {
     game = null; // Reset game interval variable
     isPaused = false; // Ensure not paused on game over
 
-    // --- NEW: Reset timer ---
+    // --- Reset timer ---
     gameStartTime = null;
-    // --- End NEW ---
 
-    // --- UPDATED: Stop music ---
+    // --- Stop music ---
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0; // Reset music to beginning
-    // --- End UPDATED ---
 
     canvas.classList.add('hidden');
     mainMenu.classList.remove('hidden');
@@ -343,7 +331,6 @@ function draw() {
             }
         }
     }
-    // --- End NEW ---
 
     // Draw Background
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -408,7 +395,7 @@ function draw() {
         }
     }
 
-    // --- UPDATED: Draw all apples ---
+    // --- Draw all apples ---
     for (const currentApple of apples) {
         if (appleImg.complete) {
             ctx.drawImage(appleImg, currentApple.x, currentApple.y, box, box);
@@ -417,7 +404,6 @@ function draw() {
             ctx.fillRect(currentApple.x, currentApple.y, box, box);
         }
     }
-    // --- End UPDATED ---
 
     // Current head position
     let snakeX = snake[0].x;
@@ -439,19 +425,18 @@ function draw() {
     } else if (snakeY >= canvas.height) {
         snakeY = 0; // Wrap from bottom to top
     }
-    // --- UPDATED: Check for apple collision ---
+    // --- Check for apple collision ---
     let appleEaten = false;
     for (let i = 0; i < apples.length; i++) {
         if (snakeX === apples[i].x && snakeY === apples[i].y) {
             score++;
             console.log("Ate apple at:", apples[i].x / box, apples[i].y / box);
 
-            // --- NEW: Play eat sound ---
+            // --- Play eat sound ---
             if (!isMuted) {
                 eatSound.currentTime = 0; // Rewind to start
                 eatSound.play();          // Play the sound
             }
-            // --- End NEW ---
 
             apples.splice(i, 1); // Remove eaten apple from array
             spawnNewApple();     // Spawn a replacement apple
@@ -459,9 +444,8 @@ function draw() {
             break; // Only eat one apple per frame
         }
     }
-    // --- End UPDATED ---
 
-    // --- UPDATED: Snake movement (pop tail only if no apple eaten) ---
+    // --- Snake movement (pop tail only if no apple eaten) ---
     if (!appleEaten) {
         if (snake.length > 0) {
             snake.pop();
@@ -471,7 +455,6 @@ function draw() {
             return;
         }
     }
-    // --- End UPDATED ---
 
     const newHead = { x: snakeX, y: snakeY };
 
