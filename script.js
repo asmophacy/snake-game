@@ -428,7 +428,17 @@ function draw() {
     if (direction === 'UP') snakeY -= box;
     if (direction === 'RIGHT') snakeX += box;
     if (direction === 'DOWN') snakeY += box;
-
+    
+    if (snakeX < 0) {
+        snakeX = canvas.width - box; // Wrap from left to right
+    } else if (snakeX >= canvas.width) {
+        snakeX = 0; // Wrap from right to left
+    }
+    if (snakeY < 0) {
+        snakeY = canvas.height - box; // Wrap from top to bottom
+    } else if (snakeY >= canvas.height) {
+        snakeY = 0; // Wrap from bottom to top
+    }
     // --- UPDATED: Check for apple collision ---
     let appleEaten = false;
     for (let i = 0; i < apples.length; i++) {
