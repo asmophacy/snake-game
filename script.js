@@ -51,7 +51,7 @@ const bodyHorizontal = new Image();
 bodyHorizontal.src = 'assets/snake-body-horizontal.png';
 
 const backgroundImg = new Image();
-backgroundImg.src = 'assets/background.jpg';
+backgroundImg.src = 'assets/background1.jpg';
 
 let imagesLoaded = 0;
 const totalImages = 8;
