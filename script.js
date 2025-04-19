@@ -8,23 +8,29 @@ const lastScoreDiv = document.getElementById('last-score');
 // --- Audio elements ---
 const backgroundMusic = document.getElementById('background-music');
 const muteButton = document.getElementById('mute-button');
-const eatSound = document.getElementById('eat-sound'); // --- NEW: Get eat sound element ---
+const eatSound = document.getElementById('eat-sound'); // --- Get eat sound element ---
 let isMuted = false; // Track mute state
 // --- End Audio elements ---
 
 // Set default volume
 backgroundMusic.volume = 0.3;
-eatSound.volume = 0.5; // --- NEW: Set eat sound volume (adjust 0.5 as needed) ---
+eatSound.volume = 0.5; // --- Set eat sound volume (adjust 0.5 as needed) ---
 
 const box = 20;
 let snake;
 let direction;
-let apples = []; // --- NEW: Array for multiple apples ---
+let apples = []; // --- Array for multiple apples ---
 let game;
 let score = 0;
 let gameSpeed = 100;
 let allImagesLoaded = false;
 let isPaused = false;
+
+// --- NEW: Swipe Input ---
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
 
 // --- Apple count and timing ---
 let targetAppleCount = 2; // Start with 2 apples
@@ -204,9 +210,46 @@ const rightButton = document.getElementById('right-button');
 upButton.addEventListener('click', () => changeDirection({ keyCode: 38 })); // Up arrow
 downButton.addEventListener('click', () => changeDirection({ keyCode: 40 })); // Down arrow
 leftButton.addEventListener('click', () => changeDirection({ keyCode: 37 })); // Left arrow
-rightButton.addEventListener('click', () => changeDirection({ keyCode: 39 })); // Right arrow);
+rightButton.addEventListener('click', () => changeDirection({ keyCode: 39 })); // Right arrow
+
+// --- NEW: Swipe detection ---
+canvas.addEventListener('touchstart', function(event) {
+    touchStartX = event.changedTouches[0].screenX;
+    touchStartY = event.changedTouches[0].screenY;
+});
+
+canvas.addEventListener('touchend', function(event) {
+    touchEndX = event.changedTouches[0].screenX;
+    touchEndY = event.changedTouches[0].screenY;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    let swipeX = touchEndX - touchStartX;
+    let swipeY = touchEndY - touchStartY;
+
+    // Check if the swipe is significant enough
+    if (Math.abs(swipeX) > 20 || Math.abs(swipeY) > 20) {
+        if (Math.abs(swipeX) > Math.abs(swipeY)) {
+            // Horizontal swipe
+            if (swipeX > 0) {
+                changeDirection({ keyCode: 39 });
+            } else {
+                changeDirection({ keyCode: 37 });
+            }
+        } else {
+            // Vertical swipe
+            if (swipeY > 0) {
+                changeDirection({ keyCode: 40 });
+            } else {
+                changeDirection({ keyCode: 38 });
+            }
+        }
+    }
+}
 
 window.addEventListener('keydown', handleKeyDown);
+
 
 function handleKeyDown(event) {
     const key = event.keyCode;
@@ -303,7 +346,7 @@ function gameOver() {
     game = null; // Reset game interval variable
     isPaused = false; // Ensure not paused on game over
 
-    // --- Reset timer ---
+    // --- NEW: Reset timer ---
     gameStartTime = null;
 
     // --- Stop music ---
@@ -318,7 +361,7 @@ function gameOver() {
 function draw() {
     if (isPaused) return;
 
-    // --- NEW: Check for timed apple increase ---
+    // --- Check for timed apple increase ---
     if (gameStartTime && !appleCountIncreased) {
         const elapsedTime = Date.now() - gameStartTime;
         if (elapsedTime >= appleIncreaseTime) {
@@ -414,7 +457,8 @@ function draw() {
     if (direction === 'UP') snakeY -= box;
     if (direction === 'RIGHT') snakeX += box;
     if (direction === 'DOWN') snakeY += box;
-    
+
+    // --- Wall Wrap-around Logic ---
     if (snakeX < 0) {
         snakeX = canvas.width - box; // Wrap from left to right
     } else if (snakeX >= canvas.width) {
@@ -425,14 +469,15 @@ function draw() {
     } else if (snakeY >= canvas.height) {
         snakeY = 0; // Wrap from bottom to top
     }
-    // --- Check for apple collision ---
+
+    // ---Check for apple collision ---
     let appleEaten = false;
     for (let i = 0; i < apples.length; i++) {
         if (snakeX === apples[i].x && snakeY === apples[i].y) {
             score++;
             console.log("Ate apple at:", apples[i].x / box, apples[i].y / box);
 
-            // --- Play eat sound ---
+            // ---Play eat sound ---
             if (!isMuted) {
                 eatSound.currentTime = 0; // Rewind to start
                 eatSound.play();          // Play the sound
@@ -445,7 +490,7 @@ function draw() {
         }
     }
 
-    // --- Snake movement (pop tail only if no apple eaten) ---
+    // ---Snake movement (pop tail only if no apple eaten) ---
     if (!appleEaten) {
         if (snake.length > 0) {
             snake.pop();
@@ -458,10 +503,10 @@ function draw() {
 
     const newHead = { x: snakeX, y: snakeY };
 
-    // Check for game over conditions (wall or self collision)
-    if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
+    // --- Check for game over conditions (self collision ONLY) ---
+    if (collision(newHead, snake)) {
         gameOver();
-        return;
+        return; // Exit draw function on game over
     }
 
     // Add new head
