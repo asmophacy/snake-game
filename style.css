@@ -7,7 +7,7 @@ body {
     background-color: #f1f5f9;
     background: linear-gradient(135deg, #bfdbfe, #93c5fd, #60a5fa);
     margin: 0;
-    cursor: url('assets/cursors/normal.cur'), auto; /* Fallback to default cursor */
+    cursor: url('assets/frutiger-aero-cursor/normal.cur'), auto; /* Fallback to default cursor */
 }
 
 #main-menu {
@@ -95,5 +95,5 @@ h1 {
 
 /* Change cursor to custom select cursor on hover */
 a:hover, button:hover, .game-card:hover {
-    cursor: url('assets/cursors/select.cur'), pointer; /* Fallback to pointer */
+    cursor: url('assets/frutiger-aero-cursor/select.cur'), pointer; /* Fallback to pointer */
 }
