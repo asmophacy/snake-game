@@ -97,3 +97,9 @@ h1 {
 a:hover, button:hover, .game-card:hover {
     cursor: url('assets/frutiger-aero-cursor/select.cur'), pointer; /* Fallback to pointer */
 }
+
+.highlight {
+    color: var(--primary-light);
+    font-weight: 700;
+    font-family: "Playfair Display", serif;
+}
