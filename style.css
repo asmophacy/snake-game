@@ -20,7 +20,7 @@ body {
     background-color: #f1f5f9;
     background: linear-gradient(135deg, #bfdbfe, #93c5fd, #60a5fa);
     margin: 0;
-    cursor: url('assets/frutiger-aero-cursor/normal.cur'), auto; /* Fallback to default cursor */
+    cursor: url('assets/hl2-cursor/lambda.cur'), auto; /* Fallback to default cursor */
 }
 
 #main-menu {
@@ -108,7 +108,7 @@ h1 {
 
 /* Change cursor to custom select cursor on hover */
 a:hover, button:hover, .game-card:hover {
-    cursor: url('assets/frutiger-aero-cursor/select.cur'), pointer; /* Fallback to pointer */
+    cursor: url('assets/hl2-cursor/select.cur'), pointer; /* Fallback to pointer */
 }
 
 .highlight {
@@ -116,3 +116,12 @@ a:hover, button:hover, .game-card:hover {
     font-weight: 700;
     font-family: "Playfair Display", serif;
 }
+
+  .links{
+    color: var(--primary-color)
+  }
+
+  .links:hover{
+    color: var(--primary-light);
+    opacity: 0.9;
+  }
