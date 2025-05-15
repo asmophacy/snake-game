@@ -17,10 +17,24 @@ body {
     align-items: center;
     font-family: sans-serif;
     height: 100vh;
-    background-color: #f1f5f9;
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd, #60a5fa);
+    background: linear-gradient(135deg, #e0f2fe, #bfdbfe, #93c5fd, #60a5fa);
+    background-attachment: fixed;
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     margin: 0;
     cursor: url('assets/hl2-cursor/lambda.cur'), auto; /* Fallback to default cursor */
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 #main-menu {
