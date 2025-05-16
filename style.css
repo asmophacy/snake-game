@@ -141,7 +141,7 @@ a:hover, button:hover, .game-card:hover {
   }
 
 #start-button {
-    padding: 10px 20px;
+    padding: 7px 10px;
     font-size: 16px;
     background-color: var(--primary-light);
     color: white;
@@ -152,5 +152,20 @@ a:hover, button:hover, .game-card:hover {
 }
 
 #start-button:hover {
+    background-color: var(--primary-color);
+}
+
+#mute-button {
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: var(--primary-light);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+#mute-button:hover {
     background-color: var(--primary-color);
 }
