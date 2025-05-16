@@ -139,3 +139,18 @@ a:hover, button:hover, .game-card:hover {
     color: var(--primary-light);
     opacity: 0.9;
   }
+
+.start-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: var(--primary-light);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.start-button:hover {
+    background-color: var(--primary-color);
+}
